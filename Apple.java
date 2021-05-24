@@ -1,0 +1,1 @@
+//look at the alien and ship classes in Starfighter for reference of importing images
