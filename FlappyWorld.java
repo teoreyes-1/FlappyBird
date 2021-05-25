@@ -13,15 +13,16 @@ import java.util.ArrayList;
 public class FlappyWorld extends Canvas implements KeyListener, Runnable
 {
 
-  private Bird bird = new Bird();
+  private Bird bird;
   private boolean[] keys;
   private BufferedImage back;
 
   public FlappyWorld()
   {
+    bird = new Bird();
     setBackground(Color.black);
 
-    keys = new boolean[5];
+    keys = new boolean[3];
 
 
     this.addKeyListener(this);
@@ -35,7 +36,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     paint(window);
   }
 
-  public void paint( Graphics window )
+  public void paint(Graphics window)
   {
     Graphics2D twoDGraph = (Graphics2D)window;
 
@@ -62,6 +63,12 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       int y = (int) Math.random()*400+100;
       graphToBack.fillRect(x,y,width,height);
     }
+    bird.move();
+    if(bird.getY() > 600 - bird.getHeight()) {
+      bird.setY(600 - bird.getHeight());
+      bird.setSpeed(0);
+    }
+    bird.draw(graphToBack);
 
     //
     twoDGraph.drawImage(back, null, 0, 0);
@@ -74,6 +81,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     {
       //Space key for starting game and controlling bird
       //keys[0] = true;
+      System.out.println("flap");
       bird.flap();
     }
     if (e.getKeyCode() == KeyEvent.VK_Q)

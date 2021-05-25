@@ -11,7 +11,7 @@ public class Bird extends MovingThing {
 
   private double ySpeed;
   private Image image;
-  private final double GRAVITY = 1;
+  private final double GRAVITY = 0.25;
 
   public Bird() {
     this(50,250);
@@ -26,7 +26,7 @@ public class Bird extends MovingThing {
     ySpeed = 0;
     try{
       //URL url = getClass().getResource("bird.jpg");
-      image = ImageIO.read(url);
+      //image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Bird failed to load!");
     }
@@ -36,13 +36,17 @@ public class Bird extends MovingThing {
     ySpeed = s;
   }
 
-  public double getSpeed() {
-    return ySpeed;
+  public void setSpeed(int s) {
+    ySpeed = (double)s;
+  }
+
+  public int getSpeed() {
+    return (int)ySpeed;
   }
 
   public void move() {
     ySpeed -= GRAVITY;
-    setY(getY() - ySpeed);
+    setY(getY() - (int)ySpeed);
   }
 
 	public void draw(Graphics window) {
@@ -52,13 +56,14 @@ public class Bird extends MovingThing {
   }
 
   public void flap() {
-    ySpeed = 100/Math.abs(ySpeed);
+    //ySpeed = 50/Math.abs(ySpeed);
+    ySpeed = 10;
     //playSound(sfx);
   }
 
-  public boolean collidesWith(MovingThing mt) {
+  public boolean collidesWith(Object obj) {
     MovingThing mt = (MovingThing) obj;
-    return (inLeftBound(mt) || inRightBound(mt)) && (inTopBound(mt) || inBottomBound(mt)) && (getX() + getWidth() >= mt.getX() && getX() <= mt.getX()) && 
+    return (getX() + getWidth() >= mt.getX() && getX() <= mt.getX()) && (getX() <= mt.getX() + mt.getWidth() && getX() + getWidth() >= mt.getX() + mt.getWidth()) && (getY() + getHeight() >= mt.getY() && getY() <= mt.getY()) && (getY() <= mt.getY() + mt.getHeight() && getY() + getHeight() >= mt.getY() + mt.getHeight());
   }
 
   public String toString() {

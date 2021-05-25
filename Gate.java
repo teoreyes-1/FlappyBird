@@ -1,3 +1,5 @@
+/*
+// feel free to comment out all my stuff, none of it's working yet since i'm still tryna figure out how to do it. k see ya
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -10,7 +12,7 @@ public class Gate
 {
   private int blockSpeed;
 
-  private ArrayList<Blocks> blocks;
+  private ArrayList<Block> blocks;
 
 
   //Creates the two pillars, and asigns their location, size etc.
@@ -45,3 +47,4 @@ public class Gate
     }
   }
 }
+*/

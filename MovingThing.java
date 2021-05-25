@@ -78,7 +78,7 @@ public abstract class MovingThing implements Moveable
 		return height;
 	}
 
-	public abstract void move(String direction);
+	public abstract void move();
 	public abstract void draw(Graphics window);
 
 	public String toString()

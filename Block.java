@@ -1,3 +1,4 @@
+/*
 import java.io.File;
 import java.net.URL;
 import java.awt.Color;
@@ -39,3 +40,4 @@ public class Block extends MovingThing
   }
 
 }
+*/
