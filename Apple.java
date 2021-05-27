@@ -18,15 +18,15 @@ public class Apple extends MovingThing {
   }
 
   public Apple(int x, int y) {
-    this(x, y, 50, 50);
+    this(x, y, 100, 100);
   }
 
   public Apple(int x, int y, int w, int h) {
     super(x, y, w, h);
     ySpeed = 0;
     try{
-      //URL url = getClass().getResource("bird.jpg");
-      //image = ImageIO.read(url);
+      URL url = getClass().getResource("apple.png.jpg");
+      image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Apple failed to load!");
     }
@@ -48,11 +48,13 @@ public class Apple extends MovingThing {
     ySpeed -= GRAVITY;
     setY(getY() - (int)ySpeed);
   }
+  public void moves(int direction) {
+    ySpeed = direction;
+    setY(direction);
+  }
 
 	public void draw(Graphics window) {
-    window.setColor(Color.GREEN);
-    //window.drawimage(image,getX(),getY(),getWidth(),getHeight(),null);
-    window.fillRect(getX(), getY(), getWidth(), getHeight());
+    window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
   }
 
   public void flap() {

@@ -16,15 +16,18 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
   private Bird bird;
   private boolean[] keys;
   private BufferedImage back;
-
+  private Apple apple;
+  private int backgroundColorChange;
+  private int appleMove;
   public FlappyWorld()
   {
     bird = new Bird();
+    apple = new Apple(500,500);
     setBackground(Color.black);
-
+    appleMove =1;
     keys = new boolean[3];
 
-
+  backgroundColorChange = 0;
     this.addKeyListener(this);
     new Thread(this).start();
 
@@ -38,6 +41,8 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
 
   public void paint(Graphics window)
   {
+    appleMove+=1;
+    backgroundColorChange+=1;
     Graphics2D twoDGraph = (Graphics2D)window;
 
     if(back == null)
@@ -49,27 +54,36 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     graphToBack.drawString("FlappyWorld ", 25, 50 );
     graphToBack.setColor(Color.BLACK);
     graphToBack.fillRect(0,0,800,600);
-
+        
     //Randomly generated background
+    if(backgroundColorChange%5==0){
     for(int i = 0;i<30;i++){
-      int red = (int) Math.random()*255;
-      int green = (int) Math.random()*255;
-      int blue = (int) Math.random()*255;
+      int red = (int) (Math.random()*50)+30;
+      int green = (int) Math.random()*100+150;
+      int blue = (int) Math.random()*100+150;
       Color clr =  new Color(red, green, blue);
       graphToBack.setColor(clr);
-      int width = (int) Math.random()*150;
-      int height = (int) Math.random()*150;
-      int x = (int) Math.random()*400+100;
-      int y = (int) Math.random()*400+100;
+      int width = (int)(Math.random()*60)+40;
+      int height = (int)(Math.random()*60)+40;
+      int x = (int)(Math.random()*800);
+      int y = (int)(Math.random()*800);
       graphToBack.fillRect(x,y,width,height);
     }
+    }
+
     bird.move();
     if(bird.getY() > 600 - bird.getHeight()) {
       bird.setY(600 - bird.getHeight());
       bird.setSpeed(0);
     }
+    if(appleMove%2==0){
+    apple.moves(-1);
+    }
+    else{
+      apple.moves(1);
+    }
     bird.draw(graphToBack);
-
+    apple.draw(graphToBack);
     //
     twoDGraph.drawImage(back, null, 0, 0);
   }

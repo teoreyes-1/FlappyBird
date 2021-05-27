@@ -1,5 +1,6 @@
 /*
 // feel free to comment out all my stuff, none of it's working yet since i'm still tryna figure out how to do it. k see ya
+//I made two commits I don't think my github account and the repl.it are properly connected so they don't seem to be pushed to the master branch yet. I'll try to fix that tmrw 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;

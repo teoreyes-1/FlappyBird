@@ -5,13 +5,14 @@ import java.awt.Color;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-//look at the alien and ship classes in Starfighter for reference of importing images
 
+//anyone familiar with importing sound into java?
 public class Bird extends MovingThing {
 
   private double ySpeed;
   private Image image;
-  private final double GRAVITY = 0.25;
+  private final double GRAVITY = 0.3;
+  //private SFXPlayer flap = new SFXPlayer();
 
   public Bird() {
     this(50,250);
@@ -25,8 +26,8 @@ public class Bird extends MovingThing {
     super(x, y, w, h);
     ySpeed = 0;
     try{
-      //URL url = getClass().getResource("bird.jpg");
-      //image = ImageIO.read(url);
+      URL url = getClass().getResource("apple.png.png");
+      image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Bird failed to load!");
     }
@@ -50,15 +51,15 @@ public class Bird extends MovingThing {
   }
 
 	public void draw(Graphics window) {
-    window.setColor(Color.GREEN);
-    //window.drawimage(image,getX(),getY(),getWidth(),getHeight(),null);
-    window.fillRect(getX(), getY(), getWidth(), getHeight());
+    //window.setColor(Color.GREEN); 
+    window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+    //window.fillRect(getX(), getY(), getWidth(), getHeight());
   }
 
   public void flap() {
     //ySpeed = 50/Math.abs(ySpeed);
     ySpeed = 10;
-    //playSound(sfx);
+    //flap.play("flap.wav");
   }
 
   public boolean collidesWith(Object obj) {
