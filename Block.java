@@ -1,4 +1,4 @@
-/*
+
 import java.io.File;
 import java.net.URL;
 import java.awt.Color;
@@ -10,16 +10,36 @@ import javax.imageio.ImageIO;
 public class Block extends MovingThing
 {
   private String direction;
+  private Image image1;
+  private Image image2;
+  private int speed;
 
   public Block()
   {
-    this(100, 100, 100, 100, "UP");
+    this(100, 100, 100, 100, "TOP", 10);
+    
   }
-  public Block(int x, int y, int w, int h, String direction)
+  public Block(int x, int y, int w, int h, String direction, int speed)
   {
     super(x, y, w, h);
 
+    /*
+     try{
+      URL url = getClass().getResource("GateUpsideDown.png");
+      image1 = ImageIO.read(url);
+    } catch(Exception e) {
+      System.out.println("Gate1 failed to load!");
+    }
+    try{
+      URL url = getClass().getResource("Gate");
+      image2 = ImageIO.read(url);
+    } catch(Exception e) {
+      System.out.println("Gate2 failed to load!");
+    }
+    */
+
     this.direction = direction;
+    this.speed = speed;
   }
 
   public void setDirection (String direction)
@@ -27,17 +47,39 @@ public class Block extends MovingThing
     this.direction = direction;
   }
 
-  public string getDirection()
+  public String getDirection()
   {
     return direction;
+  }
+  public void move()
+  {
+    setX(getX() - speed);
+  }
+  public int getSpeed()
+  {
+    return speed;
+  }
+  public void setSpeed(int speed)
+  {
+    this.speed = speed;
   }
 
 
   //Still need to change this either into a rectangle, or into a image adn figure out how to make it go upsidedown
-  public void draw( Graphics window)
+  public void draw(Graphics window)
   {
-    window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+    if(direction.equals("TOP"))
+    {
+      //window.drawImage(image1,getX(),getY(),getWidth(),getHeight(),null); 
+      window.setColor(Color.green);
+      window.fillRect(getX(), getY(), getWidth(), getHeight());
+    }
+    else
+    {
+      //window.drawImage(image2,getX(),getY(),getWidth(),getHeight(),null);
+      window.setColor(Color.green);
+      window.fillRect(getX(), getY(), getWidth(), getHeight());
+    }
   }
 
 }
-*/

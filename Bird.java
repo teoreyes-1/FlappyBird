@@ -6,12 +6,12 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-//anyone familiar with importing sound into java?
 public class Bird extends MovingThing {
 
   private double ySpeed;
   private Image image;
-  private final double GRAVITY = 0.3;
+  private final double GRAVITY = 0.15;
+  //private final int speedFactor = 6;
   //private SFXPlayer flap = new SFXPlayer();
 
   public Bird() {
@@ -19,14 +19,14 @@ public class Bird extends MovingThing {
   }
 
   public Bird(int x, int y) {
-    this(x, y, 50, 50);
+    this(x, y, 80, 50);
   }
 
   public Bird(int x, int y, int w, int h) {
     super(x, y, w, h);
     ySpeed = 0;
     try{
-      URL url = getClass().getResource("apple.png.png");
+      URL url = getClass().getResource("bird.png");
       image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Bird failed to load!");
@@ -49,6 +49,9 @@ public class Bird extends MovingThing {
     ySpeed -= GRAVITY;
     setY(getY() - (int)ySpeed);
   }
+  public void moveLeft(){
+      setX(getX()-1);
+  }
 
 	public void draw(Graphics window) {
     //window.setColor(Color.GREEN); 
@@ -57,9 +60,14 @@ public class Bird extends MovingThing {
   }
 
   public void flap() {
-    //ySpeed = 50/Math.abs(ySpeed);
-    ySpeed = 10;
-    //flap.play("flap.wav");
+    double absSpeed = Math.abs(ySpeed);
+    /*if(ySpeed < -1*speedFactor)
+      ySpeed = speedFactor*5/absSpeed;
+    else if(ySpeed < speedFactor)
+      ySpeed = speedFactor - absSpeed;
+    else
+      ySpeed = speedFactor*5/absSpeed;*/
+    ySpeed = 7;
   }
 
   public boolean collidesWith(Object obj) {

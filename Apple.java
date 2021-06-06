@@ -9,9 +9,8 @@ import javax.imageio.ImageIO;
 
 public class Apple extends MovingThing {
 
-  private double ySpeed;
+  private int ySpeed;
   private Image image;
-  private final double GRAVITY = 0.2;
 
   public Apple() {
     this(50,250);
@@ -25,42 +24,35 @@ public class Apple extends MovingThing {
     super(x, y, w, h);
     ySpeed = 0;
     try{
-      URL url = getClass().getResource("apple.png.jpg");
+      URL url = getClass().getResource("apple.jpg");
       image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Apple failed to load!");
     }
   }
 
-  public void setSpeed(double s) {
+  public void setSpeed(int s) {
     ySpeed = s;
   }
 
-  public void setSpeed(int s) {
-    ySpeed = (double)s;
-  }
-
   public int getSpeed() {
-    return (int)ySpeed;
+    return ySpeed;
   }
 
   public void move() {
-    ySpeed -= GRAVITY;
-    setY(getY() - (int)ySpeed);
+    setY(getY() + ySpeed);
   }
+  public void scrollLeft(){
+    setX(getX()-5);
+  }
+
   public void moves(int direction) {
     ySpeed = direction;
-    setY(direction);
+    move();
   }
 
 	public void draw(Graphics window) {
     window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
-  }
-
-  public void flap() {
-    //ySpeed = 50/Math.abs(ySpeed);
-    ySpeed = 10;
-    //playSound(sfx);
   }
 
   public boolean collidesWith(Object obj) {

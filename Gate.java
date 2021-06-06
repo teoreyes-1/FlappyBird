@@ -1,6 +1,3 @@
-/*
-// feel free to comment out all my stuff, none of it's working yet since i'm still tryna figure out how to do it. k see ya
-//I made two commits I don't think my github account and the repl.it are properly connected so they don't seem to be pushed to the master branch yet. I'll try to fix that tmrw 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -13,39 +10,40 @@ public class Gate
 {
   private int blockSpeed;
 
+//might want to switch to a regular array
   private ArrayList<Block> blocks;
 
 
   //Creates the two pillars, and asigns their location, size etc.
   public Gate()
   {
-    int gapPlace = (int)(Math.random()*301) + 200; //This works, by generating a number inbetween 200 and 500, gap is 200 pixels big to generate the upper block location.
+    blocks = new ArrayList<Block>();
 
-    blocks.add(new Block(600, gapPlace, 50, gapPlace, "TOP"));
-    blocks.add(new Block(600, gapPlace+200, 50, 800-(gapPLace+200), "BOTTOM" ));
+    int topBlock = (int)(Math.random()*201)+100; //This works, by generating a number inbetween 200 and 500, gap is 200 pixels big to generate the upper block location.
+
+    blocks.add(new Block(800, 0, 120, topBlock, "TOP", 5));
+    blocks.add(new Block(800, topBlock+200, 120, 600-(topBlock+200), "BOTTOM" , 5));
+    
   }
 
-  public void setBlockSpeed(int blockSpeed)
+  public ArrayList<Block> getBlocks()
   {
-    this.blockSpeed = blockSpeed;
+    return blocks;
   }
 
-  public void move()
+  public void moveBoth()
   {
-    setX(getX() - blockSpeed);
+    for(int i = 0; i < blocks.size(); i++)
+    {
+      blocks.get(i).move();
+    }
   }
-
-  public int getBlockSpeed()
-  {
-    return blockSpeed;
-  }
-
+  
   public void draw(Graphics window)
   {
-    for(ArrayList x : blocks)
+    for(Block x : blocks)
     {
       x.draw(window);
     }
   }
 }
-*/
