@@ -17,14 +17,14 @@ public class Apple extends MovingThing {
   }
 
   public Apple(int x, int y) {
-    this(x, y, 100, 100);
+    this(x, y, 75, 75);
   }
 
   public Apple(int x, int y, int w, int h) {
     super(x, y, w, h);
     ySpeed = 0;
     try{
-      URL url = getClass().getResource("apple.jpg");
+      URL url = getClass().getResource("AppleDrawing2.png");
       image = ImageIO.read(url);
     }catch(Exception e) {
       System.out.println("Apple failed to load!");
@@ -43,7 +43,7 @@ public class Apple extends MovingThing {
     setY(getY() + ySpeed);
   }
   public void scrollLeft(){
-    setX(getX()-5);
+    setX(getX()-3);
   }
 
   public void moves(int direction) {
@@ -53,6 +53,12 @@ public class Apple extends MovingThing {
 
 	public void draw(Graphics window) {
     window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+  }
+  
+  public void respawn() {
+    setX(900);
+    int randy = (int) (Math.random()*500+50);
+    setY(randy);
   }
 
   public boolean collidesWith(Object obj) {

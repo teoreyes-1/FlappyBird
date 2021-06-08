@@ -16,7 +16,7 @@ public class Block extends MovingThing
 
   public Block()
   {
-    this(100, 100, 100, 100, "TOP", 10);
+    this(100, 100, 100, 100, "TOP", 5);
     
   }
   public Block(int x, int y, int w, int h, String direction, int speed)
@@ -80,6 +80,11 @@ public class Block extends MovingThing
       window.setColor(Color.green);
       window.fillRect(getX(), getY(), getWidth(), getHeight());
     }
+  }
+
+  public String toString()
+  {
+    return getX() + " " + getY() + " " + getWidth() + " "  + getHeight();
   }
 
 }

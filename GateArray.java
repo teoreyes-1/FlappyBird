@@ -40,6 +40,38 @@ public class GateArray
     }
   }
 
+  public ArrayList<Block> getBlocks(int GateIndex)
+  {
+    return gates.get(GateIndex).getBlocks();
+  }
+  
+  public boolean BirdCollision(Bird bird, ArrayList<Block> blocks)
+  {
+    return (didCollide(bird, blocks.get(0)) && didCollide(bird, blocks.get(1)));
+  }
+
+  public boolean didCollide(Bird bird, Block blocks)
+  {
+    //System.out.print("yes");
+    int x1 = bird.getX();
+    int y1 =  bird.getY();
+    int x2 =  bird.getX() +  bird.getWidth();
+    int y2 =  bird.getY() +  bird.getHeight();
+
+    if( ((x1 <= blocks.getX()) && (blocks.getX() <= x2)) && ((y1 <= blocks.getY()) && (blocks.getY() <= y2)) )
+    {
+      return true;
+    }
+    else if( ((x1 <= (blocks.getX() + blocks.getWidth())) && ((blocks.getX() + blocks.getWidth()) <= x2)) && ((y1 <= (blocks.getY() + blocks.getHeight())) && ((blocks.getY() + blocks.getHeight()) <= y2)) )
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
   public void draw(Graphics window)
   {
     for(Gate x : gates)

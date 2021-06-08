@@ -1,85 +1,81 @@
-//currently in beta stages. can write name and score to a file, will need to write methods to determine Top X number of scores, and how to display them.
-/*
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ScoreSaver {
 
-  private List<Integer> scoresList;
-  private List<String> namesList;
+  private static List<Integer> scoresList = new ArrayList<Integer>();
+  private static List<String> namesList = new ArrayList<String>();
+  private static List<Integer> sortedScoresList = new ArrayList<Integer>();
+  private static List<String> sortedNamesList = new ArrayList<String>();
 
-  private String first = "";
-  private String secnd = "";
-  private String third = "";
-  private String fourth = "";
-  private String fifth = "";
-  private int one = 0;
-  private int two = 0;
-  private int three = 0;
-  private int four = 0;
-  private int five = 0;
+  //Display top X (up to 5)
+  private static int topPlacements = 5;
 
-
-  public static void addScore(String n, int s) {
+  private String userName = "";
+  private int userScore = 0;
+  
+  public static void addNewScore(int score, String name){
     try {
-      FileWriter myWriter = new FileWriter("Scores.txt", true);
-      myWriter.write(s + " " + n + "\n");
+      FileWriter myWriter = new FileWriter("scores.txt", true);
+      myWriter.write(score + " " + name + "\n");
       myWriter.close();
       System.out.println("Successfully wrote to the file.");
     } catch (IOException e) {
-      System.out.println("ERROR: IOException occured.");
+      System.out.println("ERROR: FileNotFoundException occured; Scores.txt not found for addNewScore.");
       e.printStackTrace();
     }
   }
 
-  public static void printAllScores(){
-    try {
-      Scanner scanner = new Scanner(new File("Scores.txt"));
-		  while (scanner.hasNextLine()) {
-		    System.out.println(scanner.nextLine());
-		  }
-		  scanner.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("ERROR: FileNotFoundException occured; Scores.txt not found for printAllScores.");
-			e.printStackTrace();
-		}
-  }
+  public static void createLeaderboard(){
 
-  public static void findTopFive(){
+    sortedScoresList.clear();
+    sortedNamesList.clear();
+    scoresList.clear();
+    namesList.clear();
 
     try {
       Scanner scanner = new Scanner(new File("scores.txt"));
       while (scanner.hasNextLine()){ //fill scoresList
-        Scanner lineRead = new Scanner(scanner.nextLine());
-        if (lineRead.hasNextInt()) {
-          scoresList.add(lineRead.nextInt());
-        }
+        String lineRead = scanner.nextLine();
+        Scanner lineReadScannerForm = new Scanner(lineRead);
+        int spaceOf = lineRead.indexOf(' ');
+        String name = lineRead.substring(spaceOf);
+        scoresList.add(lineReadScannerForm.nextInt());
+        namesList.add(name);
       }
+
       // for (int i = 0; i < scoresList.size(); i++) {
-      //   System.out.println(scoresList.get(i));
+      //   System.out.println(scoresList.get(i) + " " + namesList.get(i));
       // }
+
+      while (scoresList.size() > 0){ //in case scores size is too small
+        int indexHighest = 0;
+        int highestScore = 0;
+        for (int i = 0; i < scoresList.size(); i++){
+          if (scoresList.get(i) > highestScore) {
+            indexHighest = i;
+            highestScore = scoresList.get(i);
+          }
+        }
+        sortedScoresList.add(highestScore);
+        sortedNamesList.add(namesList.get(indexHighest));
+        scoresList.remove(indexHighest);
+        namesList.remove(indexHighest);
+      } 
+
+      // for (int i = 0; i < topPlacements; i++){
+      //   System.out.println((i + 1) + ": " + sortedNamesList.get(i) + " " + sortedScoresList.get(i));
+      // }
+
     } catch (FileNotFoundException e) {
       System.out.println("ERROR: FileNotFoundException occured; Scores.txt not found for findTopFive.");
 			e.printStackTrace();
 		}
   }
-  
-
-  //This should traverse the file and pull numbers out of it, then pull the names out of it, find the index of top 5 scores and pull corresponding name index.
-
-  public static void displayTopFive(){
-    try {
-      Scanner scanner = new Scanner(new File("Scores.txt"));
-
-      
-    } catch (FileNotFoundException e) {
-      System.out.println("ERROR: FileNotFoundException occured.");
-			e.printStackTrace();
-		}
-  }
 }
-*/

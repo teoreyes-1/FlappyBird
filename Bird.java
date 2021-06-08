@@ -67,12 +67,19 @@ public class Bird extends MovingThing {
       ySpeed = speedFactor - absSpeed;
     else
       ySpeed = speedFactor*5/absSpeed;*/
-    ySpeed = 7;
+    ySpeed = 6.5;
+  }
+
+  public void reset() {
+    setX(50);
+    setY(250);
+    ySpeed = 0;
   }
 
   public boolean collidesWith(Object obj) {
     MovingThing mt = (MovingThing) obj;
-    return (getX() + getWidth() >= mt.getX() && getX() <= mt.getX()) && (getX() <= mt.getX() + mt.getWidth() && getX() + getWidth() >= mt.getX() + mt.getWidth()) && (getY() + getHeight() >= mt.getY() && getY() <= mt.getY()) && (getY() <= mt.getY() + mt.getHeight() && getY() + getHeight() >= mt.getY() + mt.getHeight());
+    //confirms that bird's right side is within object horizontal
+    return ((getX() + getWidth() >= mt.getX() && getX() <= mt.getX() || (getX() <= mt.getX() + mt.getWidth() && getX() + getWidth() >= mt.getX() + mt.getWidth())) && ((getY() + getHeight() >= mt.getY() && getY() <= mt.getY()) || (getY() <= mt.getY() + mt.getHeight() && getY() + getHeight() >= mt.getY() + mt.getHeight())));
   }
 
   public String toString() {

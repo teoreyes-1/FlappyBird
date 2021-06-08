@@ -1,6 +1,7 @@
 
 import javax.swing.JFrame;
 import java.awt.Component;
+//import java.awt.*;
 
 public class FlappyBird extends JFrame
 {
@@ -12,6 +13,8 @@ public class FlappyBird extends JFrame
 		super("FLAPPY BIRD");
 		setSize(WIDTH,HEIGHT);
 
+    //JLabel background;
+    
 		FlappyWorld theGame = new FlappyWorld();
 		((Component)theGame).setFocusable(true);
 
@@ -19,6 +22,12 @@ public class FlappyBird extends JFrame
 
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    /*
+    ImageIcon img = new ImageIcon("FlappyBirdBackground.png");
+
+    background = new jLabel(" ", img, JLabel.CENTER);
+    add(background);*/
 	}
 
 	public static void main( String args[] )
