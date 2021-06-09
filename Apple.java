@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-//look at the alien and ship classes in Starfighter for reference of importing images
-
 public class Apple extends MovingThing {
 
   private int ySpeed;
   private Image image;
+  private Image rainbow;
+  private int cycle;
 
   public Apple() {
     this(50,250);
@@ -22,10 +22,13 @@ public class Apple extends MovingThing {
 
   public Apple(int x, int y, int w, int h) {
     super(x, y, w, h);
+    cycle = 20;
     ySpeed = 0;
     try{
       URL url = getClass().getResource("AppleDrawing2.png");
       image = ImageIO.read(url);
+      URL url2 = getClass().getResource("rainbow.png");
+      rainbow = ImageIO.read(url2);
     }catch(Exception e) {
       System.out.println("Apple failed to load!");
     }
@@ -53,13 +56,26 @@ public class Apple extends MovingThing {
   }
 
 	public void draw(Graphics window) {
-    window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+    if(cycle < 20)
+      window.drawImage(rainbow,getX()-925,getY()-30,125,60,null);
+    else if(cycle == 20)
+      setY((int) (Math.random()*500 + 50));
+    else
+      window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+    cycle++;
   }
   
-  public void respawn() {
-    setX(900);
-    int randy = (int) (Math.random()*500+50);
-    setY(randy);
+  public void respawn(boolean didCollide) 
+  {
+    if(didCollide) {
+      cycle = 0;
+      setX(getX() + 900);
+    }
+    else
+    {
+      cycle = 20;
+      setX(900);
+    }
   }
 
   public String toString() {

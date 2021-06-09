@@ -219,14 +219,14 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       apple.moves(1);
 
     if(apple.getX()<=-100)
-      apple.respawn();
+      apple.respawn(false);
     
     //bird collision with apple test
     if(bird.collidesWith(apple)) {
       //score increases
       sfx.playAudio(scoreUp);
-      score += 2;
-      apple.respawn();
+      score++;
+      apple.respawn(true);
     }
     
     gates.draw(window);
@@ -254,7 +254,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
 
   public void reset() {
     bird.reset();
-    apple.respawn();
+    apple.respawn(false);
     score = 0;
     for(int i = gates.getGateArray().size() - 1; i >= 0; i--) {
       gates.deleteGate();
