@@ -42,8 +42,9 @@ public class Apple extends MovingThing {
   public void move() {
     setY(getY() + ySpeed);
   }
+  
   public void scrollLeft(){
-    setX(getX()-3);
+    setX(getX()-2);
   }
 
   public void moves(int direction) {
@@ -59,11 +60,6 @@ public class Apple extends MovingThing {
     setX(900);
     int randy = (int) (Math.random()*500+50);
     setY(randy);
-  }
-
-  public boolean collidesWith(Object obj) {
-    MovingThing mt = (MovingThing) obj;
-    return (getX() + getWidth() >= mt.getX() && getX() <= mt.getX()) && (getX() <= mt.getX() + mt.getWidth() && getX() + getWidth() >= mt.getX() + mt.getWidth()) && (getY() + getHeight() >= mt.getY() && getY() <= mt.getY()) && (getY() <= mt.getY() + mt.getHeight() && getY() + getHeight() >= mt.getY() + mt.getHeight());
   }
 
   public String toString() {

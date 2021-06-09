@@ -81,6 +81,11 @@ public abstract class MovingThing implements Moveable
 	public abstract void move();
 	public abstract void draw(Graphics window);
 
+  public boolean collidesWith(Object obj) {
+    MovingThing mt = (MovingThing) obj;
+    return ((xPos + width >= mt.xPos && xPos + width <= mt.xPos + mt.width) || (xPos <= mt.xPos + mt.width && xPos >= mt.xPos)) && ((yPos + height >= mt.yPos && yPos + height <= mt.yPos + mt.height) || (yPos <= mt.yPos + mt.height && yPos >= mt.yPos));
+  }
+
 	public String toString()
 	{
 		return getX() + " " + getY() + " " + getWidth() + " " + getHeight();

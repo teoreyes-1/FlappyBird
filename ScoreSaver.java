@@ -14,13 +14,14 @@ public class ScoreSaver {
   private static List<Integer> sortedScoresList = new ArrayList<Integer>();
   private static List<String> sortedNamesList = new ArrayList<String>();
 
-  //Display top X (up to 5)
+  //Display top X
   private static int topPlacements = 5;
 
   private String userName = "";
   private int userScore = 0;
   
-  public static void addNewScore(int score, String name){
+  //why static?
+  public void addNewScore(int score, String name){
     try {
       FileWriter myWriter = new FileWriter("scores.txt", true);
       myWriter.write(score + " " + name + "\n");
@@ -32,7 +33,15 @@ public class ScoreSaver {
     }
   }
 
-  public static void createLeaderboard(){
+  public List<Integer> getSortedScores() {
+    return sortedScoresList;
+  }
+
+  public List<String> getSortedNames() {
+    return sortedNamesList;
+  }
+
+  public static void createLeaderboard(boolean gameEnded){
 
     sortedScoresList.clear();
     sortedNamesList.clear();
@@ -50,11 +59,8 @@ public class ScoreSaver {
         namesList.add(name);
       }
 
-      // for (int i = 0; i < scoresList.size(); i++) {
-      //   System.out.println(scoresList.get(i) + " " + namesList.get(i));
-      // }
-
-      while (scoresList.size() > 0){ //in case scores size is too small
+      while (scoresList.size() > 0)
+      { //in case scores size is too small
         int indexHighest = 0;
         int highestScore = 0;
         for (int i = 0; i < scoresList.size(); i++){
@@ -68,10 +74,6 @@ public class ScoreSaver {
         scoresList.remove(indexHighest);
         namesList.remove(indexHighest);
       } 
-
-      // for (int i = 0; i < topPlacements; i++){
-      //   System.out.println((i + 1) + ": " + sortedNamesList.get(i) + " " + sortedScoresList.get(i));
-      // }
 
     } catch (FileNotFoundException e) {
       System.out.println("ERROR: FileNotFoundException occured; Scores.txt not found for findTopFive.");

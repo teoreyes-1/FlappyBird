@@ -11,7 +11,6 @@ import java.util.List;
 public class GateArray
 {
   private ArrayList<Gate> gates;
-
   
   public GateArray()
   {
@@ -32,6 +31,7 @@ public class GateArray
   {
     gates.remove(0);
   }
+
   public void moveAll()
   {
     for(int i = 0; i < gates.size(); i++)
@@ -44,7 +44,7 @@ public class GateArray
   {
     return gates.get(GateIndex).getBlocks();
   }
-  
+/*
   public boolean BirdCollision(Bird bird, ArrayList<Block> blocks)
   {
     return (didCollide(bird, blocks.get(0)) && didCollide(bird, blocks.get(1)));
@@ -71,7 +71,7 @@ public class GateArray
       return false;
     }
   }
-
+*/
   public void draw(Graphics window)
   {
     for(Gate x : gates)

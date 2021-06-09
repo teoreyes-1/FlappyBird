@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Gate 
 {
-  private int blockSpeed;
 
 //might want to switch to a regular array
   private ArrayList<Block> blocks;
@@ -21,8 +20,8 @@ public class Gate
 
     int topBlock = (int)(Math.random()*201)+100; //This works, by generating a number inbetween 200 and 500, gap is 200 pixels big to generate the upper block location.
 
-    blocks.add(new Block(800, 0, 120, topBlock, "TOP", 3));
-    blocks.add(new Block(800, topBlock+200, 120, 600-(topBlock+200), "BOTTOM" , 3));
+    blocks.add(new Block(800, 0, 120, topBlock, "TOP", 2));
+    blocks.add(new Block(800, topBlock+200, 120, 600-(topBlock+200), "BOTTOM" , 2));
     
   }
 

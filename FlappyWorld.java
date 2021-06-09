@@ -7,36 +7,38 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.GraphicsEnvironment;
-import static java.lang.Character.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.awt.Image;
 import java.net.URL;
+import javax.swing.JOptionPane;
+import static java.lang.Character.*;
 
 public class FlappyWorld extends Canvas implements KeyListener, Runnable
 {
-
   private Bird bird;
-
-  private BufferedImage back;
   private Apple apple;
-  private int backgroundColorChange;
+  private BufferedImage back;
   private int appleMove;
-  /*private String flap;
-  private String fall;
-  private String hit;
-  private String scoreUp;
-  private String whoosh;*/
   private String gameState;
   private GateArray gates;
   private int score;
   private ScoreSaver scoreSaver;
   private String name;
   private Image image;
+  private int imageScroll;
+  private int frameCounter;
+  //private int backgroundColorChange;
+
+  /*private String flap;
+  private String fall;
+  private String hit;
+  private String scoreUp;
+  private String whoosh;*/
 
   public FlappyWorld()
   {
@@ -47,6 +49,8 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     gameState = "menu";
     gates = new GateArray();
     scoreSaver = new ScoreSaver();
+    imageScroll = 0;
+    frameCounter = 0;
 
     /*
     SFXPlayer actually works and compiles, but it seems that Repl.it does not support 
@@ -60,7 +64,14 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     SFXPlayer.playAudio(hit);
     */
 
-    backgroundColorChange = 0;
+    //backgroundColorChange = 0;
+    try{
+      URL url = getClass().getResource("FlappyBirdBackground.png");
+      image = ImageIO.read(url);
+    }catch(Exception e) {
+      System.out.println("Background failed to load!");
+    }
+    
     this.addKeyListener(this);
     new Thread(this).start();
 
@@ -82,21 +93,9 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     Graphics graphToBack = back.createGraphics();
 
     graphToBack.setColor(Color.BLUE);
-    graphToBack.drawString("Flappy Bird ", 25, 50);
-    graphToBack.setColor(Color.BLACK); //i'm going to try and put an image as the background, let's maybe try and make the apples have no black box liek the bird
+    graphToBack.drawString("Flappy Bird", 25, 50);
+    graphToBack.setColor(Color.BLACK); 
     graphToBack.fillRect(0,0,800,600);
-
-
-    try{
-      URL url = getClass().getResource("FlappyBirdBackground.png");
-      image = ImageIO.read(url);
-    }catch(Exception e) {
-      System.out.println("Background failed to load!");
-    }
-    
-
-
-
 
     if(state.equals("menu")) {
       paintMenu(graphToBack);
@@ -110,87 +109,78 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     else if(state.equals("gameOver")){
       paintGameOver(graphToBack);
     }
-    else if(state.equals("HighScore"))
+    else if(state.equals("highScore"))
     {
       paintHighScore(graphToBack);
     }
-
-    
     twoDGraph.drawImage(back, null, 0, 0);
   }
 
   public void paintMenu(Graphics window) {
-    window.drawImage(image, 0, 0, 800, 600, null);
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 100));
-    window.setColor(Color.CYAN);
+    window.drawImage(image, imageScroll, 0, 800, 600, null);
+    window.drawImage(image, imageScroll + 800, 0, 800, 600, null);
+    window.setFont(new Font("DialogInput", Font.BOLD, 113));
+    window.setColor(Color.BLUE);
     window.drawString("FLAPPY BIRD", 20, 100);
-    window.setFont(new Font("Trebuchet MS", Font.PLAIN, 30));
-    window.drawString("Press I for instructions", 200, 360);
-    window.drawString("Press SPACE to begin", 210, 400);
-    window.setColor(Color.YELLOW);
-    window.drawString("Press S for Leader Board", 195, 440);
-    bird.draw(window);
-  }
-  public void paintHighScore(Graphics window) {
-    window.drawImage(image, 0, 0, 800, 600, null);
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 75));
-    window.setColor(Color.YELLOW);
-    window.drawString("High Score", 180, 100);
-
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
-    window.drawString("Name:", 200, 200);
-    window.drawString("Score:", 480, 200);
-
-    //put the sorted top names here
-
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 30));
-    window.drawString("Press S again to go back", 200, 550);
+    window.setFont(new Font("DialogInput", Font.BOLD, 25));
+    window.drawString("Press I for instructions", 190, 410);
+    window.drawString("Press SPACE to begin", 210, 440);
+    window.drawString("Press S to view leaderboard", 170, 470);
     bird.draw(window);
   }
 
   public void paintInstructions(Graphics window) {
-    window.drawImage(image, 0, 0, 800, 600, null);
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 90));
-    window.setColor(Color.CYAN);
+    window.drawImage(image, imageScroll, 0, 800, 600, null);
+    window.drawImage(image, imageScroll + 800, 0, 800, 600, null);
+    window.setFont(new Font("DialogInput", Font.BOLD, 105));
+    window.setColor(Color.BLUE);
     window.drawString("INSTRUCTIONS", 15, 100);
-    window.setFont(new Font("Trebuchet MS", Font.PLAIN, 30));
-    window.drawString("Use the SPACE bar to help Flappy avoid the pipes.", 20, 270);
-    window.drawString("Pick up the golden apples for extra points!", 30, 300);
+    window.setFont(new Font("DialogInput", Font.BOLD, 25));
+    window.drawString("Use the SPACE bar to help Flappy avoid the pipes.", 30, 250);
+    window.drawString("Pick up the golden apples for extra points!", 50, 280);
+    window.drawString("Press I again to go back", 190, 410);
+    window.drawString("Press SPACE to begin", 210, 440);
+  }
 
-    window.drawString("Press I again to go back", 190, 360);
-    window.drawString("Press SPACE to begin", 210, 400);
+  public void paintHighScore(Graphics window) {
+    window.drawImage(image, imageScroll, 0, 800, 600, null);
+    window.drawImage(image, imageScroll + 800, 0, 800, 600, null);
+    window.setColor(new Color(0, 153, 204));
+    window.fillRect(75,100,625,350);
+    window.setFont(new Font("DialogInput", Font.BOLD, 75));
+    window.setColor(Color.ORANGE);
+    window.drawString("High Scores", 150, 100);
+    window.setFont(new Font("DialogInput", Font.BOLD, 25));
+    window.drawString("Name:", 170, 150);
+    window.drawString("Score:", 500, 150);
+    for(int i = 1; (i <= 10) && (i <= scoreSaver.getSortedNames().size()); i++) {
+      window.drawString(i + ". " + scoreSaver.getSortedNames().get(i-1), 120, 150 + (i*27));
+      window.drawString("" + scoreSaver.getSortedScores().get(i-1), 510, 150 + (i*27));
+    }
+    window.setColor(Color.BLUE);
+    window.setFont(new Font("DialogInput", Font.BOLD, 30));
+    window.drawString("Press S again to go back", 180, 550);
   }
 
   public void paintGame(Graphics window) {
-    //Randomly generated background
-    window.drawImage(image, 0, 0, 800, 600, null);
-
-
+    frameCounter++;
+    if(frameCounter % 3 == 0)
+      imageScroll--;
+    if(imageScroll == -800)
+      imageScroll = 0;
+    window.drawImage(image, imageScroll, 0, 800, 600, null);
+    window.drawImage(image, imageScroll + 800, 0, 800, 600, null);
     
-    
-
-    //do we still need this
+    /*
     if(backgroundColorChange%5==0){
-      //paintBackground(window);
+      paintBackground(window);  
+      //we can still add this if you guys want i just thought it looked cleaner without
     }
+    */
 
-    bird.move();
-    if(bird.getY() > 570 - bird.getHeight() || bird.getY() < 0)
-    {
-      gameState = "gameOver";
-    }
-
-    
-    //Gate generation and stuff
-    if(gates.getGateArray().size() == 0)
-    {
+    //Gate generation and management
+    if(gates.getGateArray().size() == 0 || (gates.getGateArray().get(gates.getGateArray().size()-1).getBlocks().get(1).getX() <= 350))
       gates.generateGate();
-    }
-    
-    if(gates.getGateArray().get(gates.getGateArray().size()-1).getBlocks().get(1).getX() <= 350)
-    {
-      gates.generateGate();
-    }
     if(gates.getGateArray().get(0).getBlocks().get(1).getX() <= -120)
     {
       //increase score when gate despawns
@@ -198,19 +188,26 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       gates.deleteGate();
     }
 
+    //move the objects
+    bird.move();
     gates.moveAll();
+    apple.scrollLeft();
+    
+    //check that bird has not hit top or bottom
+    if(bird.getY() > 570 - bird.getHeight() || bird.getY() < 0)
+      gameState = "gameOver";
 
-     //collision between bird and Gates
+    //collision between bird and Gates
     for(int i = 0; i < gates.getGateArray().size(); i++) {
       for(Block b : gates.getBlocks(i)) {
+        while(apple.collidesWith(b))
+          apple.setY((int) (Math.random()*500+50));
         if(bird.collidesWith(b))
-        {
           gameState = "gameOver";
-        }
       }
     }
 
-    appleMove++;
+    /*appleMove++;
     backgroundColorChange++;
 
     if(appleMove%2==0){
@@ -218,12 +215,10 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     }
     else{
       apple.moves(1);
-    }
-    apple.scrollLeft();
+    }*/
 
-    if(apple.getX()<=-100){
+    if(apple.getX()<=-100)
       apple.respawn();
-    }
     
     //bird collision with apple test
     if(bird.collidesWith(apple)) {
@@ -231,33 +226,28 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       score += 2;
       apple.respawn();
     }
-
+    
     gates.draw(window);
     bird.draw(window);
-    apple.draw(window);
+    apple.draw(window); 
 
-    window.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
+    window.setFont(new Font("DialogInput", Font.BOLD, 40));
     window.setColor(Color.WHITE);
-    window.drawString(score + "", 400, 100);
+    window.drawString(score + "", 380, 100);
   }
 
   public void paintGameOver(Graphics window) {
-    window.drawImage(image, 0, 0, 800, 600, null);
-    window.setFont(new Font("Trebuchet MS", Font.BOLD, 100));
+    //window.drawImage(image, 0, 0, 800, 600, null);
+    window.setFont(new Font("DialogInput", Font.BOLD, 113));
     window.setColor(Color.RED);
     window.drawString("Game Over", 100, 200);
-    window.setFont(new Font("Trebuchet MS", Font.PLAIN, 40));
-    window.setColor(Color.CYAN);
-    window.drawString("Your score was: " + score, 205, 300);
+    window.setFont(new Font("DialogInput", Font.BOLD, 40));
+    window.setColor(Color.GREEN);
+    window.drawString("Your score was: " + score, 185, 300);
+    window.drawString("Press SPACE to restart", 140, 350);
+    window.setFont(new Font("DialogInput", Font.BOLD, 20));
     window.setColor(Color.ORANGE);
-    window.drawString("Press SPACE to restart", 180, 350);
-     window.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
-     window.setColor(Color.GREEN);
-    window.drawString("If you want to save your score, Press H", 200, 400);
-    //Enlarge final score
-    //Prompt player if they would like to save their score
-    //Write input nickname into file and save
-    //*Maybe prompt for nickname before game starts so that player doesn't have to input it every time they restart? Since games can run really short* 
+    window.drawString("If you want to save your score, Press H", 160, 400);
   }
 
   public void reset() {
@@ -269,6 +259,8 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     }
   }
 
+  //no longer used
+  /*
   public void paintBackground(Graphics window) {
     for(int i = 0;i<30;i++){
       int red = (int) (Math.random()*50)+30;
@@ -282,7 +274,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       int y = (int)(Math.random()*800);
       window.fillRect(x,y,width,height);
     }
-  }
+  }*/
 
   public void keyPressed(KeyEvent e)
   {
@@ -306,26 +298,30 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       else if(gameState.equals("instructions"))
         gameState = "menu";
     }
-    if (e.getKeyCode() == KeyEvent.VK_H)
+    if (e.getKeyCode() == KeyEvent.VK_H && gameState.equals("gameOver"))
     {
-      //Key H for saving your nickname as well as showing leader board?, do we have one?
-      System.out.print("Enter Your Name to Save Your Score: ");
-      Scanner input = new Scanner(System.in);
-      name = input.nextLine();
-      System.out.println("Thanks we recorded your name " + name + " along with your score of " + score); 
-      scoreSaver.addNewScore(score, name);
+      //Key H for saving your nickname
+      //System.out.print("Enter Your Name to Save Your Score: ");
+      //Scanner input = new Scanner(System.in);
+      //name = input.nextLine();
+      String name = JOptionPane.showInputDialog("Enter Your Name to Save Your Score: ");
+      System.out.println("We have recorded your name '" + name + "' along with your score of " + score); 
+      scoreSaver.addNewScore(score, name); 
       gameState = "menu";
       reset();
-      
     }
     if (e.getKeyCode() == KeyEvent.VK_S)
     {
-      if(gameState.equals("menu"))
-        gameState = "HighScore";
-      else if(gameState.equals("HighScore"))
+      //Key S for viewing the leaderboard
+      if(gameState.equals("menu")) 
+      {
+        scoreSaver.createLeaderboard(true);
+        gameState = "highScore";
+      }
+      else if(gameState.equals("highScore"))
+      {
         gameState = "menu";
-      
-      
+      }
     }
     repaint();
   }

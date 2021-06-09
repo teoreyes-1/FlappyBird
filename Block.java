@@ -51,35 +51,44 @@ public class Block extends MovingThing
   {
     return direction;
   }
+  
   public void move()
   {
     setX(getX() - speed);
   }
+
   public int getSpeed()
   {
     return speed;
   }
+
   public void setSpeed(int speed)
   {
     this.speed = speed;
   }
 
-
   //Still need to change this either into a rectangle, or into a image adn figure out how to make it go upsidedown
   public void draw(Graphics window)
   {
+    Color myColor1 = new Color(103, 219, 101);
+    window.setColor(myColor1);
+    window.fillRect(getX(), getY(), getWidth(), getHeight());
+    /*
     if(direction.equals("TOP"))
     {
       //window.drawImage(image1,getX(),getY(),getWidth(),getHeight(),null); 
-      window.setColor(Color.green);
+      Color myColor1 = new Color(103, 219, 101);
+      window.setColor(myColor1);
       window.fillRect(getX(), getY(), getWidth(), getHeight());
     }
     else
     {
       //window.drawImage(image2,getX(),getY(),getWidth(),getHeight(),null);
-      window.setColor(Color.green);
+      Color myColor1 = new Color(103, 219, 101);
+      window.setColor(myColor1);
       window.fillRect(getX(), getY(), getWidth(), getHeight());
     }
+    */
   }
 
   public String toString()

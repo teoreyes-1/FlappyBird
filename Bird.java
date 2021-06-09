@@ -10,9 +10,9 @@ public class Bird extends MovingThing {
 
   private double ySpeed;
   private Image image;
-  private final double GRAVITY = 0.15;
-  //private final int speedFactor = 6;
-  //private SFXPlayer flap = new SFXPlayer();
+  private Image image2;
+  private final double GRAVITY = 0.1;
+  private int cycle;
 
   public Bird() {
     this(50,250);
@@ -24,10 +24,13 @@ public class Bird extends MovingThing {
 
   public Bird(int x, int y, int w, int h) {
     super(x, y, w, h);
+    cycle = 5;
     ySpeed = 0;
     try{
       URL url = getClass().getResource("bird.png");
       image = ImageIO.read(url);
+      URL url2 = getClass().getResource("bird2.png");
+      image2 = ImageIO.read(url2);
     }catch(Exception e) {
       System.out.println("Bird failed to load!");
     }
@@ -49,37 +52,25 @@ public class Bird extends MovingThing {
     ySpeed -= GRAVITY;
     setY(getY() - (int)ySpeed);
   }
-  public void moveLeft(){
-      setX(getX()-1);
-  }
 
 	public void draw(Graphics window) {
-    //window.setColor(Color.GREEN); 
-    window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
-    //window.fillRect(getX(), getY(), getWidth(), getHeight());
+    if(cycle < 30)
+      window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+    else
+      window.drawImage(image2,getX(),getY(),getWidth(),getHeight(),null);
+    cycle++;
   }
 
   public void flap() {
     double absSpeed = Math.abs(ySpeed);
-    /*if(ySpeed < -1*speedFactor)
-      ySpeed = speedFactor*5/absSpeed;
-    else if(ySpeed < speedFactor)
-      ySpeed = speedFactor - absSpeed;
-    else
-      ySpeed = speedFactor*5/absSpeed;*/
-    ySpeed = 6.5;
+    ySpeed = 5.5;
+    cycle = 0;
   }
 
   public void reset() {
     setX(50);
     setY(250);
     ySpeed = 0;
-  }
-
-  public boolean collidesWith(Object obj) {
-    MovingThing mt = (MovingThing) obj;
-    //confirms that bird's right side is within object horizontal
-    return ((getX() + getWidth() >= mt.getX() && getX() <= mt.getX() || (getX() <= mt.getX() + mt.getWidth() && getX() + getWidth() >= mt.getX() + mt.getWidth())) && ((getY() + getHeight() >= mt.getY() && getY() <= mt.getY()) || (getY() <= mt.getY() + mt.getHeight() && getY() + getHeight() >= mt.getY() + mt.getHeight())));
   }
 
   public String toString() {
