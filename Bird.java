@@ -9,10 +9,13 @@ import javax.imageio.ImageIO;
 public class Bird extends MovingThing {
 
   private double ySpeed;
-  private Image image;
-  private Image image2;
+  private Image spriteOne;
+  private Image spriteTwo;
   private final double GRAVITY = 0.1;
   private int cycle;
+  //private String fall = "fall.wav";
+  //private String flap = "flap.wav";
+  //private SoundEffect sfx;
 
   public Bird() {
     this(50,250);
@@ -24,13 +27,15 @@ public class Bird extends MovingThing {
 
   public Bird(int x, int y, int w, int h) {
     super(x, y, w, h);
+    wing = new Wing();
     cycle = 5;
     ySpeed = 0;
+    //sfx = new SoundEffect();
     try{
-      URL url = getClass().getResource("bird.png");
-      image = ImageIO.read(url);
-      URL url2 = getClass().getResource("bird2.png");
-      image2 = ImageIO.read(url2);
+      URL urlOne = getClass().getResource("bird1.png");
+      spriteOne = ImageIO.read(urlOne);
+      URL urlTwo = getClass().getResource("bird2.png");
+      spriteTwo = ImageIO.read(urlTwo);
     }catch(Exception e) {
       System.out.println("Bird failed to load!");
     }
@@ -55,19 +60,21 @@ public class Bird extends MovingThing {
 
 	public void draw(Graphics window) {
     if(cycle < 30)
-      window.drawImage(image,getX(),getY(),getWidth(),getHeight(),null);
+      window.drawImage(sprite1,getX(),getY(),getWidth(),getHeight(),null);
     else
-      window.drawImage(image2,getX(),getY(),getWidth(),getHeight(),null);
+      window.drawImage(sprite2,getX(),getY(),getWidth(),getHeight(),null);
     cycle++;
   }
 
   public void flap() {
+    //sfx.playAudio(flap);
     double absSpeed = Math.abs(ySpeed);
     ySpeed = 5.5;
     cycle = 0;
   }
 
   public void reset() {
+    //sfx.playAudio(fall);
     setX(50);
     setY(250);
     ySpeed = 0;

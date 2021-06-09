@@ -1,14 +1,13 @@
 //Class works but does not produce sound in repl.it :(
-  /*
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 
-public class SFXPlayer {
+public class SoundEffectPlayer {
   public static void main(String[] args) {
-
+    
   }
 
   public static void playAudio(String filePath)
@@ -22,9 +21,6 @@ public class SFXPlayer {
         Clip clip = AudioSystem.getClip();
         clip.open(audioInput);
         clip.start();
-        //clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-        //JOptionPane.showMessageDialog(null, "Press OK to stop playing");
       }
       else
       {
@@ -36,5 +32,3 @@ public class SFXPlayer {
       ex.printStackTrace();
     }
   }
-}
-*/
