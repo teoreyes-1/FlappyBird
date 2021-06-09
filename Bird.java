@@ -13,9 +13,8 @@ public class Bird extends MovingThing {
   private Image spriteTwo;
   private final double GRAVITY = 0.1;
   private int cycle;
-  //private String fall = "fall.wav";
-  //private String flap = "flap.wav";
-  //private SoundEffect sfx;
+  private String flap = "flap.wav";
+  private SoundSource sfx;
 
   public Bird() {
     this(50,250);
@@ -27,10 +26,9 @@ public class Bird extends MovingThing {
 
   public Bird(int x, int y, int w, int h) {
     super(x, y, w, h);
-    wing = new Wing();
     cycle = 5;
     ySpeed = 0;
-    //sfx = new SoundEffect();
+    sfx = new SoundSource();
     try{
       URL urlOne = getClass().getResource("bird1.png");
       spriteOne = ImageIO.read(urlOne);
@@ -60,21 +58,29 @@ public class Bird extends MovingThing {
 
 	public void draw(Graphics window) {
     if(cycle < 30)
-      window.drawImage(sprite1,getX(),getY(),getWidth(),getHeight(),null);
+      window.drawImage(spriteOne,getX(),getY(),getWidth(),getHeight(),null);
     else
-      window.drawImage(sprite2,getX(),getY(),getWidth(),getHeight(),null);
+      window.drawImage(spriteTwo,getX(),getY(),getWidth(),getHeight(),null);
     cycle++;
   }
 
+  public void drawContinuous(Graphics window) {
+    if(cycle % 16 < 8)
+      window.drawImage(spriteOne,getX(),getY(),getWidth(),getHeight(),null);
+    else
+      window.drawImage(spriteTwo,getX(),getY(),getWidth(),getHeight(),null);
+    cycle++;
+  }
+
+
   public void flap() {
-    //sfx.playAudio(flap);
+    sfx.playAudio(flap);
     double absSpeed = Math.abs(ySpeed);
     ySpeed = 5.5;
     cycle = 0;
   }
 
   public void reset() {
-    //sfx.playAudio(fall);
     setX(50);
     setY(250);
     ySpeed = 0;

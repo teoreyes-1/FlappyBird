@@ -34,11 +34,12 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
   private int frameCounter;
   //private int backgroundColorChange;
 
-  /*private String flap;
-  private String fall;
+  
   private String hit;
   private String scoreUp;
-  private String whoosh;*/
+  private String whoosh;
+  private String fall;
+  private SoundSource sfx;
 
   public FlappyWorld()
   {
@@ -53,16 +54,14 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     frameCounter = 0;
 
     /*
-    SFXPlayer actually works and compiles, but it seems that Repl.it does not support 
-    audio playback. Other people have made it work in Python but I can't find any guides on making it work in Java :(
-    flap = "flap.wav";
-    fall = "fall.wav";
+    SoundSource actually works and compiles, but it seems that Repl.it does not support 
+    audio playback. Other people have made it work in Python but I can't find any guides on making it work in Java :( */
     hit = "hit.wav";
     scoreUp = "scoreUp.wav";
     whoosh = "whoosh.wav";
+    fall = "fall.wav";
     
-    SFXPlayer.playAudio(hit);
-    */
+    sfx = new SoundSource();
 
     //backgroundColorChange = 0;
     try{
@@ -84,7 +83,11 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
   }
 
   public void paint(Graphics window, String state) {
-  
+    frameCounter++;
+    if(frameCounter % 3 == 0)
+      imageScroll--;
+    if(imageScroll == -800)
+      imageScroll = 0;
     Graphics2D twoDGraph = (Graphics2D)window;
 
     if(back == null)
@@ -126,7 +129,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     window.drawString("Press I for instructions", 190, 410);
     window.drawString("Press SPACE to begin", 210, 440);
     window.drawString("Press S to view leaderboard", 170, 470);
-    bird.draw(window);
+    bird.drawContinuous(window);
   }
 
   public void paintInstructions(Graphics window) {
@@ -163,11 +166,6 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
   }
 
   public void paintGame(Graphics window) {
-    frameCounter++;
-    if(frameCounter % 3 == 0)
-      imageScroll--;
-    if(imageScroll == -800)
-      imageScroll = 0;
     window.drawImage(image, imageScroll, 0, 800, 600, null);
     window.drawImage(image, imageScroll + 800, 0, 800, 600, null);
     
@@ -185,6 +183,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     {
       //increase score when gate despawns
       score++;
+      sfx.playAudio(scoreUp);
       gates.deleteGate();
     }
 
@@ -194,28 +193,30 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     apple.scrollLeft();
     
     //check that bird has not hit top or bottom
-    if(bird.getY() > 570 - bird.getHeight() || bird.getY() < 0)
+    if(bird.getY() > 570 - bird.getHeight() || bird.getY() < 0) {
+      sfx.playAudio(hit);
       gameState = "gameOver";
+    }
 
     //collision between bird and Gates
     for(int i = 0; i < gates.getGateArray().size(); i++) {
       for(Block b : gates.getBlocks(i)) {
         while(apple.collidesWith(b))
           apple.setY((int) (Math.random()*500+50));
-        if(bird.collidesWith(b))
+        if(bird.collidesWith(b)) {
+          sfx.playAudio(hit);
           gameState = "gameOver";
+        }
       }
     }
 
-    /*appleMove++;
-    backgroundColorChange++;
+    appleMove++;
+    //backgroundColorChange++;
 
-    if(appleMove%2==0){
-    apple.moves(-1);
-    }
-    else{
+    if(appleMove%24 < 12)
+      apple.moves(-1);
+    else
       apple.moves(1);
-    }*/
 
     if(apple.getX()<=-100)
       apple.respawn();
@@ -223,6 +224,7 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     //bird collision with apple test
     if(bird.collidesWith(apple)) {
       //score increases
+      sfx.playAudio(scoreUp);
       score += 2;
       apple.respawn();
     }
@@ -281,11 +283,13 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     if (e.getKeyCode() == KeyEvent.VK_SPACE)
     {
       //Space key for starting game and controlling bird
-      if(gameState.equals("menu") || gameState.equals("instructions"))
+      if(gameState.equals("menu") || gameState.equals("instructions")) {
         gameState = "game";
-      else if(gameState.equals("game"))
+        sfx.playAudio(fall);
+      }else if(gameState.equals("game"))
         bird.flap();
       else if(gameState.equals("gameOver")) {
+        sfx.playAudio(whoosh);
         gameState = "menu";
         reset();
       }
@@ -293,10 +297,14 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
     if (e.getKeyCode() == KeyEvent.VK_I)
     {
       //Key I for an instructions screen or an alternative button for extra functions
-      if(gameState.equals("menu"))
+      if(gameState.equals("menu")) {
+        sfx.playAudio(whoosh);
         gameState = "instructions";
-      else if(gameState.equals("instructions"))
+      }
+      else if(gameState.equals("instructions")) {
+        sfx.playAudio(whoosh);
         gameState = "menu";
+      }
     }
     if (e.getKeyCode() == KeyEvent.VK_H && gameState.equals("gameOver"))
     {
@@ -315,11 +323,13 @@ public class FlappyWorld extends Canvas implements KeyListener, Runnable
       //Key S for viewing the leaderboard
       if(gameState.equals("menu")) 
       {
+        sfx.playAudio(whoosh);
         scoreSaver.createLeaderboard(true);
         gameState = "highScore";
       }
       else if(gameState.equals("highScore"))
       {
+        sfx.playAudio(whoosh);
         gameState = "menu";
       }
     }

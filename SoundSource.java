@@ -5,12 +5,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 
-public class SoundEffectPlayer {
-  public static void main(String[] args) {
+public class SoundSource {
+  public SoundSource() {}
+  public void main(String[] args) {
     
   }
 
-  public static void playAudio(String filePath)
+  public void playAudio(String filePath)
   {
     try
     {
@@ -32,3 +33,4 @@ public class SoundEffectPlayer {
       ex.printStackTrace();
     }
   }
+}
